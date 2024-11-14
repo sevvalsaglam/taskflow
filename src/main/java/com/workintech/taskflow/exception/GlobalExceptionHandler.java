@@ -1,19 +1,25 @@
 package com.workintech.taskflow.exception;
 
-import org.springframework.boot.context.config.ConfigDataResourceNotFoundException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-@RestControllerAdvice
+import java.time.LocalDateTime;
+
+@ControllerAdvice
+@Slf4j
 public class GlobalExceptionHandler {
-
-    @ExceptionHandler(ConfigDataResourceNotFoundException.class)
-    public ResponseEntity<ExceptionResponse> handleResourceNotFoundException(ConfigDataResourceNotFoundException ex) {
-        ExceptionResponse response = new ExceptionResponse("NOT_FOUND", ex.getMessage());
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+    @ExceptionHandler
+    public ResponseEntity<ExceptionResponse> handleException(ApiException apiException){
+        log.error("apiException occured: "+ apiException);
+        return new ResponseEntity<>(new ExceptionResponse(apiException.getMessage(),apiException.getHttpStatus().value(), LocalDateTime.now()),apiException.getHttpStatus());
     }
-
+    @ExceptionHandler
+    public ResponseEntity<ExceptionResponse> handleException(Exception exception){
+        log.error("exception occured: "+ exception);
+        return new ResponseEntity<>(new ExceptionResponse(exception.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value(), LocalDateTime.now()),HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 }
 

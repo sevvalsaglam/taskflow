@@ -1,14 +1,14 @@
 package com.workintech.taskflow.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -21,11 +21,12 @@ public class Task {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull
+    @NotNull(message = "Task name is required")
     @Column(name = "task_name")
     private String taskName;
 
-    @NotNull
+    @Future(message = "Due date must be in the future")
+    @NotNull(message = "Due date is required")
     @Column(name = "due_date")
     private LocalDate dueDate;
 
@@ -44,6 +45,6 @@ public class Task {
             joinColumns = @JoinColumn(name = "task_id"),
             inverseJoinColumns = @JoinColumn(name = "category_id")
     )
-    private Set<Category> categories = new HashSet<>();
+    private List<Category> categories;
 
 }
