@@ -36,7 +36,6 @@ public class TaskService {
         Task task = findTaskById(id);
         task.setTaskName(taskDetails.getTaskName());
         task.setCategories(taskDetails.getCategories());
-        // Diğer alanlar burada güncellenebilir
         return taskRepository.save(task);
     }
 

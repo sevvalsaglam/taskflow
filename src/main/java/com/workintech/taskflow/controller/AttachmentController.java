@@ -38,9 +38,8 @@ public class AttachmentController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteAttachment(@PathVariable Long id) {
+    public void deleteAttachment(@PathVariable Long id) {
         attachmentService.deleteAttachment(id);
-        return ResponseEntity.noContent().build();
     }
 }
 
